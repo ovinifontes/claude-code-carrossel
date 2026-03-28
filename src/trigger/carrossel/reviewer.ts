@@ -40,32 +40,35 @@ export const reviewerTask = task({
 
 TAREFA: Revisar o carrossel abaixo com base no PADRÃO ARKHEDIGITAL e decidir se está aprovado ou precisa de ajustes.
 
-═══ PADRÃO ARKHEDIGITAL (REFERÊNCIA OBRIGATÓRIA) ═══
-- Slide 1 (CAPA): Título max 8 palavras, subtítulo provocativo, tag "INTELIGÊNCIA ARTIFICIAL"
-- Slides 2-3 (CONTEXTO): O que aconteceu / Por que importa
-- Slides 4-6 (DETALHES): Fatos, dados, comparações
-- Slides 7-8 (IMPACTO): O que muda na prática
-- Slide final (CTA): Handle @arkhedigitall + botões 💾🔄❤️
-- Títulos: max 6 palavras, impactantes
-- Body: max 40 palavras por slide
+═══ FRAMEWORK DE 7 SLIDES (REFERÊNCIA OBRIGATÓRIA) ═══
+- Slide 1 (HOOK/CAPA): Título max 10 palavras que PARA o scroll. Subtítulo provocativo. Indicador "Deslize →"
+- Slide 2 (CONTEXTO): Estabelece o problema/situação. Por que importa AGORA.
+- Slides 3-5 (VALOR): UM ponto por slide. Fatos, dados, exemplos concretos.
+- Slide 6 (IMPACTO): O que muda na prática para o leitor.
+- Slide 7 (CTA): Handle @arkhedigitall + botões 💾🔄❤️
+
+═══ REGRAS DE CONTEÚDO ═══
+- Títulos: max 8 palavras, específicos (números > genérico), voz ativa
+- Body dos slides de conteúdo (2-6): ENTRE 30-40 palavras — OBRIGATÓRIO
+  • Se um slide tem MENOS de 25 palavras no body, está REPROVADO
+  • O body deve conter dados, exemplos concretos, comparações ou dicas práticas
+  • NUNCA aceite frases vagas como "A IA está mudando tudo" ou "Isso é revolucionário"
 - Emojis: max 1 por slide
-- Tom: Profissional mas acessível — nunca formal demais
-- Caption: gancho forte na 1ª linha, max 300 palavras, 8-15 hashtags
+- Tom: Profissional mas acessível
+- TUDO em Português do Brasil
 
 ═══ CRITÉRIOS DE REVISÃO ═══
-1. **Precisão**: Informações corretas e atualizadas? Nada enganoso ou exagerado?
-2. **Clareza**: Linguagem acessível para público geral? Jargões explicados?
-3. **Engajamento**: Títulos chamam atenção? Gera curiosidade para deslizar?
-4. **Tom**: Profissional mas acessível? Sem ser formal demais nem informal demais?
-5. **Português BR**: Gramática e ortografia corretas? Sem erros?
-6. **Tamanho**: Body de cada slide tem no máximo 40 palavras? Título max 6 palavras?
-7. **Estrutura**: Fluxo lógico entre slides? Progressão contexto → detalhe → impacto?
-8. **CTA**: Último slide tem call-to-action claro com @arkhedigitall?
-9. **Caption**: Gancho irresistível na primeira linha (decide se a pessoa lê)? CTA final? 8-15 hashtags?
-10. **Headlines**: Usam números/dados quando possível? Benefícios > Features? Voz ativa?
+1. **Densidade de conteúdo**: Cada slide de conteúdo tem 30-40 palavras SUBSTANCIAIS no body? (CRÍTICO — principal motivo de reprovação)
+2. **Especificidade**: Títulos e body usam números, dados e exemplos concretos? Nada vago?
+3. **Precisão**: Informações corretas? Nada enganoso ou exagerado?
+4. **Progressão lógica**: Hook → Contexto → Valor → Impacto → CTA?
+5. **Engajamento**: Hook para o scroll? Cada slide motiva o swipe para o próximo?
+6. **Português BR**: Gramática e ortografia corretas?
+7. **CTA**: Último slide com call-to-action claro?
+8. **Caption**: Gancho forte na 1ª linha, max 300 palavras, 8-15 hashtags?
 
 SE APROVADO: Retorne o conteúdo exatamente como está.
-SE REPROVADO: Retorne o conteúdo CORRIGIDO com as melhorias aplicadas.
+SE REPROVADO: Retorne o conteúdo CORRIGIDO — especialmente enriquecendo slides com body text fraco.
 
 IMPORTANTE: TUDO deve ser em Português do Brasil. NUNCA use inglês.
 

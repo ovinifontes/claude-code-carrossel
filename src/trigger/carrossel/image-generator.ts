@@ -98,19 +98,146 @@ VISUAL REQUIREMENTS:
   return Buffer.from(imagePart.inlineData.data, "base64");
 }
 
-// Gera HTML para um slide de conteúdo
-function buildSlideHTML(slide: SlideContent, instagramHandle: string): string {
-  const isCover = slide.type === "capa";
+// Gera HTML para um slide de conteúdo (hierarquia visual baseada nas regras de carousel design)
+function buildSlideHTML(slide: SlideContent, instagramHandle: string, totalSlides: number): string {
   const isCTA = slide.type === "cta";
 
-  const titleSize = isCover ? "52px" : isCTA ? "44px" : "38px";
-  const bodySize = isCover ? "24px" : "22px";
+  // Número do slide formatado com zero à esquerda (01, 02, etc.)
+  const slideNum = String(slide.slideNumber).padStart(2, "0");
 
+  if (isCTA) {
+    return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: ${BRAND.width}px;
+      height: ${BRAND.height}px;
+      font-family: 'Sora', sans-serif;
+      background: linear-gradient(160deg, ${BRAND.darkBg} 0%, ${BRAND.arkheBlue}33 50%, ${BRAND.darkBg} 100%);
+      color: ${BRAND.white};
+      overflow: hidden;
+      position: relative;
+    }
+    .glow-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, ${BRAND.cyan}18 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .content {
+      position: relative;
+      z-index: 2;
+      padding: 80px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    h1 {
+      font-size: 52px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, ${BRAND.white} 0%, ${BRAND.cyan} 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .body-text {
+      font-size: 26px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: ${BRAND.lightGray};
+      max-width: 800px;
+      margin-bottom: 32px;
+    }
+    .cta-handle {
+      font-size: 40px;
+      font-weight: 800;
+      color: ${BRAND.cyan};
+      margin-bottom: 40px;
+    }
+    .cta-actions {
+      display: flex;
+      gap: 20px;
+    }
+    .cta-action {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 22px;
+      font-weight: 600;
+      color: ${BRAND.white};
+      background: ${BRAND.arkheBlue}44;
+      padding: 16px 28px;
+      border-radius: 16px;
+      border: 1px solid ${BRAND.cyan}44;
+    }
+    .footer {
+      position: absolute;
+      bottom: 50px;
+      left: 80px;
+      right: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      z-index: 2;
+    }
+    .footer-logo {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, ${BRAND.cyan}, ${BRAND.arkheBlue});
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .footer-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: ${BRAND.lightGray};
+    }
+  </style>
+</head>
+<body>
+  <div class="glow-center"></div>
+  <div class="content">
+    <h1>${slide.title}</h1>
+    <p class="body-text">${slide.body}</p>
+    <div class="cta-handle">${instagramHandle}</div>
+    <div class="cta-actions">
+      <div class="cta-action">💾 Salvar</div>
+      <div class="cta-action">🔄 Compartilhar</div>
+      <div class="cta-action">❤️ Curtir</div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="footer-logo">A</div>
+    <span class="footer-name">ArkheDigital</span>
+  </div>
+</body>
+</html>`;
+  }
+
+  // Slide de conteúdo com hierarquia visual forte
   return `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -126,11 +253,11 @@ function buildSlideHTML(slide: SlideContent, instagramHandle: string): string {
     /* Glow decorativo */
     .glow-top {
       position: absolute;
-      top: -100px;
-      right: -100px;
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, ${BRAND.cyan}22 0%, transparent 70%);
+      top: -120px;
+      right: -80px;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, ${BRAND.cyan}15 0%, transparent 70%);
       border-radius: 50%;
     }
     .glow-bottom {
@@ -139,99 +266,62 @@ function buildSlideHTML(slide: SlideContent, instagramHandle: string): string {
       left: -100px;
       width: 500px;
       height: 500px;
-      background: radial-gradient(circle, ${BRAND.arkheBlue}22 0%, transparent 70%);
+      background: radial-gradient(circle, ${BRAND.arkheBlue}15 0%, transparent 70%);
       border-radius: 50%;
     }
 
-    /* Linha decorativa lateral */
-    .side-line {
-      position: absolute;
-      left: 60px;
-      top: 180px;
-      bottom: 200px;
-      width: 3px;
-      background: linear-gradient(to bottom, ${BRAND.cyan}, ${BRAND.arkheBlue}, transparent);
-      border-radius: 2px;
-    }
-
-    /* Conteúdo */
+    /* Conteúdo principal */
     .content {
       position: relative;
       z-index: 2;
-      padding: ${isCover ? "120px 80px 80px" : "100px 80px 80px 100px"};
+      padding: 80px 80px 120px 80px;
       height: 100%;
       display: flex;
       flex-direction: column;
-      justify-content: ${isCover ? "center" : isCTA ? "center" : "flex-start"};
+      justify-content: center;
     }
 
+    /* Número grande do slide — hierarquia visual nível 1 */
     .slide-number {
-      font-size: 14px;
-      font-weight: 600;
+      font-size: 108px;
+      font-weight: 900;
       color: ${BRAND.cyan};
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      margin-bottom: 20px;
+      opacity: 0.25;
+      line-height: 1;
+      margin-bottom: 8px;
     }
 
-    .emoji {
-      font-size: 48px;
-      margin-bottom: 24px;
+    /* Barra de acento */
+    .accent-bar {
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(to right, ${BRAND.cyan}, ${BRAND.energyOrange});
+      border-radius: 2px;
+      margin-bottom: 28px;
     }
 
+    /* Título — hierarquia visual nível 2 */
     h1 {
-      font-size: ${titleSize};
-      font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 32px;
+      font-size: 52px;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 28px;
       background: linear-gradient(135deg, ${BRAND.white} 0%, ${BRAND.cyan} 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
+    /* Body text — hierarquia visual nível 3 */
     .body-text {
-      font-size: ${bodySize};
+      font-size: 28px;
       font-weight: 400;
-      line-height: 1.7;
+      line-height: 1.6;
       color: ${BRAND.lightGray};
-      max-width: 850px;
+      max-width: 900px;
     }
 
-    /* Accent bar */
-    .accent-bar {
-      width: 60px;
-      height: 4px;
-      background: linear-gradient(to right, ${BRAND.cyan}, ${BRAND.energyOrange});
-      border-radius: 2px;
-      margin-bottom: 32px;
-    }
-
-    /* CTA específico */
-    .cta-handle {
-      font-size: 36px;
-      font-weight: 700;
-      color: ${BRAND.cyan};
-      margin-top: 24px;
-    }
-    .cta-actions {
-      display: flex;
-      gap: 24px;
-      margin-top: 40px;
-    }
-    .cta-action {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 20px;
-      color: ${BRAND.lightGray};
-      background: ${BRAND.arkheBlue}33;
-      padding: 12px 24px;
-      border-radius: 12px;
-      border: 1px solid ${BRAND.cyan}33;
-    }
-
-    /* Footer com logo */
+    /* Footer com logo e paginação */
     .footer {
       position: absolute;
       bottom: 50px;
@@ -264,32 +354,22 @@ function buildSlideHTML(slide: SlideContent, instagramHandle: string): string {
       color: ${BRAND.lightGray};
     }
     .footer-page {
-      font-size: 14px;
+      font-size: 16px;
+      font-weight: 600;
       color: ${BRAND.lightGray}88;
+      letter-spacing: 1px;
     }
   </style>
 </head>
 <body>
   <div class="glow-top"></div>
   <div class="glow-bottom"></div>
-  ${!isCover && !isCTA ? '<div class="side-line"></div>' : ""}
 
   <div class="content">
-    ${!isCover && !isCTA ? `<div class="slide-number">ARKHEDIGITAL • SLIDE ${slide.slideNumber}</div>` : ""}
-    ${slide.emoji ? `<div class="emoji">${slide.emoji}</div>` : ""}
-    ${!isCTA ? '<div class="accent-bar"></div>' : ""}
+    <div class="slide-number">${slideNum}</div>
+    <div class="accent-bar"></div>
     <h1>${slide.title}</h1>
-    ${isCTA ? `
-      <p class="body-text">${slide.body}</p>
-      <div class="cta-handle">${instagramHandle}</div>
-      <div class="cta-actions">
-        <div class="cta-action">💾 Salvar</div>
-        <div class="cta-action">🔄 Compartilhar</div>
-        <div class="cta-action">❤️ Curtir</div>
-      </div>
-    ` : `
-      <p class="body-text">${slide.body}</p>
-    `}
+    <p class="body-text">${slide.body}</p>
   </div>
 
   <div class="footer">
@@ -297,7 +377,7 @@ function buildSlideHTML(slide: SlideContent, instagramHandle: string): string {
       <div class="footer-logo">A</div>
       <span class="footer-name">ArkheDigital</span>
     </div>
-    <span class="footer-page">${slide.slideNumber}</span>
+    <span class="footer-page">${slide.slideNumber} / ${totalSlides}</span>
   </div>
 </body>
 </html>`;
@@ -503,7 +583,7 @@ export const imageGeneratorTask = task({
         });
       } else {
         // Slides de conteúdo e CTA: HTML/CSS puro
-        const html = buildSlideHTML(slide, instagramHandle);
+        const html = buildSlideHTML(slide, instagramHandle, slides.length);
         const buffer = await renderHTMLtoPNG(html, chromePath);
         images.push({
           slideNumber: slide.slideNumber,
