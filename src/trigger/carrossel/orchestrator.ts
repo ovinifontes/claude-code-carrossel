@@ -96,7 +96,7 @@ export const carrosselOrchestrator = schedules.task({
     console.log(`   CARROSSEL PRONTO!`);
     console.log(`   Tema: ${content.topic}`);
     console.log(`   Slides: ${images.images.length}`);
-    console.log(`   Pasta: ${saved.folderPath}`);
+    console.log(`   WhatsApp: ${saved.whatsappSent ? "✅ Enviado" : "❌ Falhou"}`);
     console.log(`   Tempo: ${elapsed}s`);
     console.log(`   ════════════════════════════════════════`);
 
@@ -104,8 +104,7 @@ export const carrosselOrchestrator = schedules.task({
       topic: content.topic,
       headline: content.headline,
       slideCount: images.images.length,
-      folderPath: saved.folderPath,
-      docxPath: saved.docxPath,
+      whatsappSent: saved.whatsappSent,
       elapsed: `${elapsed}s`,
     };
   },

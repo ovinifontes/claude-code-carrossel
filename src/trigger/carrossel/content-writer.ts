@@ -43,27 +43,53 @@ export const contentWriterTask = task({
 
 TAREFA: Criar o roteiro completo de um carrossel educativo (7-10 slides) sobre o tema fornecido.
 
-DIRETRIZES DE ESCRITA:
-- Linguagem: Português Brasil, tom profissional mas acessível
+═══ IDENTIDADE VISUAL (PADRÃO ARKHEDIGITAL) ═══
+- Cores: Arkhe Blue #045C90, Cyan #24D1E7, Energy Orange #F58118
+- Fundo: #0B1622 (escuro) / #111D2E (secundário)
+- Texto: #FFFFFF (principal) / #B8C5D3 (secundário)
+- Fonte: Sora (Bold títulos, Regular corpo)
+- Formato: 1080×1350px portrait Instagram
+
+═══ DIRETRIZES DE ESCRITA ═══
+- Linguagem: Português Brasil, tom profissional mas acessível — nunca formal demais
 - Público: Profissionais e entusiastas de tecnologia e IA
 - Objetivo: Educar e engajar — o leitor deve aprender algo e querer compartilhar
 - Cada slide deve ter no MÁXIMO 40 palavras de body text (para caber no design)
 - Títulos curtos e impactantes (max 6 palavras)
 - Use emojis com moderação (1 por slide, no máximo)
+- TUDO deve ser em Português do Brasil. NUNCA use inglês.
 
-ESTRUTURA DO CARROSSEL:
-- Slide 1 (capa): Título chamativo que gera curiosidade. Body curto (1 frase provocativa)
-- Slides 2-3: Contexto — o que aconteceu / por que importa
-- Slides 4-6: Detalhes — fatos, dados, comparações
-- Slides 7-8: Impacto — o que muda na prática para o leitor
-- Slide 9 (opcional): Opinião/previsão da ArkheDigital
-- Slide final (CTA): Chamada para seguir ${instagramHandle}, salvar e compartilhar
+═══ ESTRUTURA DO CARROSSEL (OBRIGATÓRIA) ═══
+- Slide 1 (CAPA): Título chamativo max 8 palavras. 1 frase provocativa como subtítulo. Tag "INTELIGÊNCIA ARTIFICIAL" no topo.
+- Slides 2-3 (CONTEXTO): O que aconteceu / Por que importa
+- Slides 4-6 (DETALHES): Fatos, dados, comparações, números concretos
+- Slides 7-8 (IMPACTO): O que muda na prática para o leitor, conexão com o dia a dia
+- Slide 9 (OPINIÃO — opcional): Visão/previsão da ArkheDigital sobre o tema
+- Slide Final (CTA): Chamada para seguir ${instagramHandle}, salvar e compartilhar. Botões visuais: 💾 Salvar | 🔄 Compartilhar | ❤️ Curtir
 
-CAPTION DO POST:
-- Gancho forte na primeira linha (aparece no preview)
-- 3-4 parágrafos curtos
-- CTA final pedindo para salvar/compartilhar
+═══ TÉCNICAS DE COPYWRITING (PERFORMANCE CREATIVE) ═══
+Use estas técnicas para maximizar engajamento:
+
+ÂNGULOS DE HOOK (escolha o melhor para o tema):
+- Curiosidade: "O segredo que as big techs não contam sobre..."
+- Dor/Problema: "Você ainda está fazendo X manualmente?"
+- Resultado: "Como fazer Y em Z minutos com IA"
+- Prova social: "Por que 10.000+ profissionais já estão usando..."
+- Contrarian: "Por que [prática comum] não funciona mais"
+
+HEADLINES QUE FUNCIONAM:
+- Específico ("Reduz 75% do tempo") > Vago ("Economize tempo")
+- Benefício ("Crie conteúdo 3x mais rápido") > Feature ("Usa GPT-4")
+- Voz ativa ("Automatize seus relatórios") > Passiva ("Relatórios são automatizados")
+- Inclua números quando possível ("3x mais rápido", "em 5 minutos")
+
+═══ CAPTION DO POST ═══
+- PRIMEIRA LINHA: Gancho irresistível (aparece no preview do feed — é o que decide se a pessoa lê)
+- 3-4 parágrafos curtos e escaneáveis
+- Inclua dados/números para credibilidade
+- CTA final: "Salve esse post e compartilhe com quem precisa saber disso!"
 - Max 300 palavras
+- 8-15 hashtags relevantes
 
 Responda em JSON com esta estrutura:
 {

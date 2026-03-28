@@ -46,19 +46,25 @@ async function generateCoverWithGemini(
   const geminiKey = process.env.GEMINI_API_KEY;
   if (!geminiKey) throw new Error("GEMINI_API_KEY is not set");
 
-  const prompt = `Create a stunning, modern cover image for an Instagram carousel about AI technology.
+  const prompt = `Create a museum-quality cover image for an Instagram carousel about AI technology.
 Topic: "${topic}"
 Title: "${headline}"
 
-Style requirements:
-- Dark navy/deep blue background (#0B1622)
-- Futuristic, tech-forward aesthetic
-- Abstract geometric shapes and neural network patterns
-- Glowing accents in cyan (#24D1E7) and blue (#045C90)
-- Professional, clean composition
+DESIGN PHILOSOPHY — "Geometric Silence meets Chromatic Language":
+This image must look meticulously crafted, as if someone at the absolute top of their field labored over every detail with painstaking care. The composition should feel like an artifact from an imaginary discipline — treating AI with the reverence of scientific observation.
+
+VISUAL REQUIREMENTS:
+- Dark navy/deep blue background (#0B1622) with subtle depth gradients
+- Futuristic, tech-forward aesthetic with Swiss formalism precision
+- Abstract geometric shapes: neural network patterns, grid-based precision, organic clustering
+- Glowing accents in cyan (#24D1E7) and blue (#045C90) with radial glow effects
+- Dramatic negative space — let the composition breathe
+- Dense accumulation of repeating elements that build meaning through patient repetition
+- Color zones that create meaning: cyan for innovation, blue for trust, subtle orange (#F58118) sparks for energy
+- Every element placed with the precision of a master craftsman
 - NO TEXT in the image — text will be overlaid later
 - 1080x1350 portrait format
-- High quality, editorial grade`;
+- Editorial grade, museum quality — not AI-generic, but deeply intentional`;
 
   const response = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${geminiKey}`,
@@ -68,7 +74,7 @@ Style requirements:
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: {
-          responseModalities: ["TEXT", "IMAGE"],
+          responseModalities: ["IMAGE", "TEXT"],
         },
       }),
     }
