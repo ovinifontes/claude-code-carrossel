@@ -1,0 +1,24 @@
+{
+  "name": "carrossel_automatico",
+  "version": "1.0.0",
+  "description": "Automações com Trigger.dev",
+  "scripts": {
+    "dev": "npx trigger.dev@latest dev",
+    "deploy": "npx trigger.dev@latest deploy"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@trigger.dev/sdk": "^4.4.3",
+    "@types/node": "^22.0.0",
+    "docx": "^9.6.1",
+    "dotenv": "^17.3.1",
+    "openai": "^6.33.0",
+    "puppeteer-core": "^24.40.0",
+    "rss-parser": "^3.13.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.5.0"
+  }
+}
