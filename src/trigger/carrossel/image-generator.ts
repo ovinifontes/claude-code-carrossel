@@ -1,7 +1,5 @@
 import { task } from "@trigger.dev/sdk";
-import puppeteer from "puppeteer-core";
-import * as fs from "fs";
-import * as path from "path";
+import puppeteer from "puppeteer";
 import type { SlideContent } from "./content-writer.js";
 
 // Brand ArkheDigital
@@ -21,22 +19,6 @@ export interface ImageOutput {
   images: { slideNumber: number; base64: string; filename: string }[];
 }
 
-// Encontra o Chrome instalado no sistema
-function findChromePath(): string {
-  const paths = [
-    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-    "/Applications/Chromium.app/Contents/MacOS/Chromium",
-    "/usr/bin/google-chrome",
-    "/usr/bin/chromium-browser",
-    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-  ];
-  for (const p of paths) {
-    if (fs.existsSync(p)) return p;
-  }
-  throw new Error(
-    "Chrome não encontrado. Instale o Google Chrome ou defina CHROME_PATH no .env"
-  );
-}
 
 // Gera imagem de capa usando Gemini (NanoBanana Pro)
 async function generateCoverWithGemini(
@@ -384,11 +366,10 @@ function buildSlideHTML(slide: SlideContent, instagramHandle: string, totalSlide
 }
 
 // Renderiza HTML para imagem PNG usando Puppeteer
-async function renderHTMLtoPNG(html: string, chromePath: string): Promise<Buffer> {
+async function renderHTMLtoPNG(html: string): Promise<Buffer> {
   const browser = await puppeteer.launch({
-    executablePath: chromePath,
     headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-gpu", "--disable-dev-shm-usage"],
   });
 
   try {
@@ -542,7 +523,6 @@ export const imageGeneratorTask = task({
     headline: string;
   }): Promise<ImageOutput> => {
     const instagramHandle = process.env.INSTAGRAM_HANDLE || "@arkhedigitall";
-    const chromePath = process.env.CHROME_PATH || findChromePath();
 
     const { slides, topic, headline } = payload;
     console.log(`🎨 Gerando ${slides.length} imagens para: "${topic}"`);
@@ -575,7 +555,7 @@ export const imageGeneratorTask = task({
 
         // Renderizar capa HTML (com ou sem background do Gemini)
         const coverHTML = buildCoverHTML(slide, coverBase64);
-        const buffer = await renderHTMLtoPNG(coverHTML, chromePath);
+        const buffer = await renderHTMLtoPNG(coverHTML);
         images.push({
           slideNumber: slide.slideNumber,
           base64: buffer.toString("base64"),
@@ -584,7 +564,7 @@ export const imageGeneratorTask = task({
       } else {
         // Slides de conteúdo e CTA: HTML/CSS puro
         const html = buildSlideHTML(slide, instagramHandle, slides.length);
-        const buffer = await renderHTMLtoPNG(html, chromePath);
+        const buffer = await renderHTMLtoPNG(html);
         images.push({
           slideNumber: slide.slideNumber,
           base64: buffer.toString("base64"),
