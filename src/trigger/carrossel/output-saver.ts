@@ -213,19 +213,34 @@ async function generateDocx(
             heading: HeadingLevel.HEADING_2,
             spacing: { after: 200 },
           }),
-          ...content.slides.flatMap((slide) => [
-            new Paragraph({
-              children: [
-                new TextRun({
-                  text: `Slide ${slide.slideNumber} — ${slide.title}`,
-                  bold: true,
-                  color: "045C90",
-                }),
-              ],
-              spacing: { before: 200, after: 80 },
-            }),
-            new Paragraph({ text: slide.body, spacing: { after: 160 } }),
-          ]),
+          ...content.slides.flatMap((slide) => {
+            const typeLabels: Record<string, string> = {
+              hero: "Hero/Hook",
+              problem: "Problema",
+              example: "Exemplo",
+              solution: "Solução",
+              visual: "Visual",
+              value: "Valor",
+              impact: "Impacto",
+              cta: "CTA",
+              capa: "Capa",
+              conteudo: "Conteúdo",
+            };
+            const label = typeLabels[slide.type] || slide.type;
+            return [
+              new Paragraph({
+                children: [
+                  new TextRun({
+                    text: `Slide ${slide.slideNumber} (${label}) — ${slide.title}`,
+                    bold: true,
+                    color: "045C90",
+                  }),
+                ],
+                spacing: { before: 200, after: 80 },
+              }),
+              new Paragraph({ text: slide.body, spacing: { after: 160 } }),
+            ];
+          }),
         ],
       },
     ],
