@@ -28,7 +28,8 @@ export interface ImageOutput {
 
 async function generateCoverWithGemini(
   topic: string,
-  headline: string
+  headline: string,
+  attempt = 1
 ): Promise<Buffer> {
   const geminiKey = process.env.GEMINI_API_KEY;
   if (!geminiKey) throw new Error("GEMINI_API_KEY is not set");
@@ -68,6 +69,15 @@ VISUAL REQUIREMENTS:
 
   if (!response.ok) {
     const err = await response.text();
+    const maxAttempts = 4;
+    if (response.status === 503 && attempt < maxAttempts) {
+      const delayMs = attempt * 15_000; // 15s, 30s, 45s
+      console.warn(
+        `\u26a0\ufe0f Gemini 503 (tentativa ${attempt}/${maxAttempts}), aguardando ${delayMs / 1000}s...`
+      );
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+      return generateCoverWithGemini(topic, headline, attempt + 1);
+    }
     throw new Error(`Gemini API error: ${response.status} - ${err}`);
   }
 
@@ -84,6 +94,58 @@ VISUAL REQUIREMENTS:
   }
 
   return Buffer.from(imagePart.inlineData.data, "base64");
+}
+
+// ═══════════════════════════════════════════════════
+// DALL-E 3 Fallback Cover Art Generation
+// ═══════════════════════════════════════════════════
+
+async function generateCoverWithDallE(
+  topic: string,
+  headline: string
+): Promise<Buffer> {
+  const openaiKey = process.env.OPENAI_API_KEY;
+  if (!openaiKey) throw new Error("OPENAI_API_KEY is not set");
+
+  const prompt = `Museum-quality abstract art image for an Instagram carousel about AI technology.
+Topic: "${topic}"
+Title: "${headline}"
+
+VISUAL REQUIREMENTS:
+- HIGH CONTRAST abstract geometric shapes and patterns
+- Neural network patterns, grid-based precision, organic clustering
+- Bold color zones: cyan (#24D1E7) for innovation, blue (#045C90) for trust, orange (#F58118) sparks for energy
+- Dramatic compositions with strong visual anchors
+- Swiss formalism precision with futuristic aesthetic
+- Will be used as a subtle faded background (~15% opacity) over warm off-white
+- NO TEXT in the image
+- Editorial grade, museum quality`;
+
+  const response = await fetch("https://api.openai.com/v1/images/generations", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${openaiKey}`,
+    },
+    body: JSON.stringify({
+      model: "dall-e-3",
+      prompt,
+      n: 1,
+      size: "1024x1792",
+      response_format: "b64_json",
+    }),
+  });
+
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(`DALL-E API error: ${response.status} - ${err}`);
+  }
+
+  const data: any = await response.json();
+  const b64 = data.data?.[0]?.b64_json;
+  if (!b64) throw new Error("DALL-E não retornou imagem");
+
+  return Buffer.from(b64, "base64");
 }
 
 // ═══════════════════════════════════════════════════
@@ -416,25 +478,24 @@ export const imageGeneratorTask = task({
       );
     }
 
-    // Generate Gemini cover art for hero slide
+    // Generate cover art for hero slide (Gemini → DALL-E fallback)
     let coverImageBase64: string | null = null;
     try {
-      console.log(
-        "\ud83e\udd16 Gerando arte de capa com Gemini..."
-      );
-      const coverBuffer = await generateCoverWithGemini(
-        topic,
-        headline
-      );
+      console.log("\ud83e\udd16 Gerando arte de capa com Gemini...");
+      const coverBuffer = await generateCoverWithGemini(topic, headline);
       if (coverBuffer.length > 0) {
         coverImageBase64 = coverBuffer.toString("base64");
         console.log("\u2705 Arte de capa Gemini gerada");
       }
     } catch (err) {
-      console.warn(
-        "\u26a0\ufe0f Gemini falhou, usando fallback:",
-        err
-      );
+      console.warn("\u26a0\ufe0f Gemini falhou, tentando DALL-E 3...", err);
+      try {
+        const coverBuffer = await generateCoverWithDallE(topic, headline);
+        coverImageBase64 = coverBuffer.toString("base64");
+        console.log("\u2705 Arte de capa DALL-E 3 gerada");
+      } catch (err2) {
+        console.warn("\u26a0\ufe0f DALL-E tamb\u00e9m falhou, sem imagem de capa:", err2);
+      }
     }
 
     // Render each slide
