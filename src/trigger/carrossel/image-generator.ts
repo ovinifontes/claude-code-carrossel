@@ -413,8 +413,8 @@ async function renderHTMLtoPNG(html: string): Promise<Buffer> {
       height: LAYOUT.HEIGHT,
     });
     await page.setContent(html, {
-      waitUntil: "networkidle0",
-      timeout: 15000,
+      waitUntil: "domcontentloaded",
+      timeout: 30000,
     });
 
     // Wait for fonts to load
