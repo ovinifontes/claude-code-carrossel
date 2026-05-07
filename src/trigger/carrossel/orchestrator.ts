@@ -19,8 +19,9 @@ import { outputSaverTask } from "./output-saver.js";
  */
 export const carrosselOrchestrator = schedules.task({
   id: "carrossel-orchestrator",
+  // Schedule pausado — descomente o cron abaixo e redeploy para reativar
   // Terça(2), Quinta(4), Sábado(6) às 9h UTC = 6h BRT
-  cron: "0 9 * * 2,4,6",
+  // cron: "0 9 * * 2,4,6",
 
   run: async () => {
     const startTime = Date.now();
